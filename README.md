@@ -1,33 +1,49 @@
-# Anmeldesystem – HTML, CSS und JavaScript
+# Sicheres Anmeldesystem (Node.js)
 
-Ein kleines, wiederverwendbares **Frontend-Demo** für Registrierung, Anmeldung, Abmeldung und einen Beispiel-Dateibereich.
+Ein kleines, wiederverwendbares Login-System mit HTML/CSS/JavaScript im Frontend und Node.js/Express im Backend.
 
-## Dateien
-- `index.html` – Anmelde- und Registrierungsoberfläche
-- `style.css` – responsives dunkles Design
-- `script.js` – Demo-Logik
-- Nach Registrierung erscheint ein Dateibereich mit Links zu Projektdateien.
+## Was ist sicherer als die vorherige Demo?
+
+- **Passwörter werden nicht im Klartext gespeichert.** Der Server hasht sie mit Argon2id. Ein Hash ist keine verschlüsselte, wieder entschlüsselbare Kopie.
+- Benutzerkonten liegen in einer SQLite-Datenbank unter `data/users.sqlite`. Dieser Ordner wird nicht als Website ausgeliefert.
+- Sitzungen werden serverseitig in SQLite gespeichert. Der Browser erhält nur ein Cookie mit `HttpOnly`, `SameSite=Strict` und in Produktion `Secure`.
+- Bei Anmeldung und Registrierung wird die Sitzungs-ID erneuert.
+- Login-/Registrierungsversuche sind begrenzt; Helmet setzt wichtige HTTP-Sicherheitsheader.
+- Private Beispieldateien werden nur über API-Routen nach Prüfung der Sitzung ausgeliefert. Es gibt keine allgemeine Freigabe des Projektordners.
+
+## Voraussetzungen
+
+- Node.js 20 oder neuer
+- HTTPS für den öffentlichen Server (z. B. Reverse Proxy mit Let's Encrypt)
 
 ## Lokal starten
-1. Repository herunterladen oder klonen.
-2. `index.html` im Browser öffnen (alternativ mit der VS-Code-Erweiterung Live Server).
-3. Einen Benutzernamen und ein Passwort mit mindestens 8 Zeichen wählen.
-4. Abmelden und mit denselben Daten wieder anmelden.
 
-## Wo werden die Daten gespeichert?
-- Demo-Benutzerkonten liegen im `localStorage` des jeweiligen Browsers und bleiben dort normalerweise auch nach dem Schließen erhalten.
-- Die aktuelle Anmeldung wird im `sessionStorage` gehalten und endet normalerweise, wenn die Browser-Sitzung geschlossen wird.
-- Die Konten werden **nicht** automatisch zwischen Geräten oder Browsern synchronisiert.
+```bash
+npm install
+npm run dev
+```
 
-## Wichtige Sicherheitsgrenze
-**Diese Version ist nur zum Lernen und für lokale Demos geeignet. Nicht für echte Konten oder private Dateien verwenden.** Passwörter im Browser-`localStorage` sind nicht sicher. Da HTML/CSS/JavaScript hier ohne Backend laufen, kann jeder die Dateien direkt aufrufen und die Anmeldung umgehen. Die Anmeldung sperrt also nur die Demo-Oberfläche, nicht die Dateien selbst.
+Öffne dann http://localhost:3000. Neue Konten benötigen ein Passwort mit mindestens **12 Zeichen**.
 
-Für ein echtes System brauchst du ein Backend (z. B. Node.js), eine Datenbank, Passwort-Hashing mit Argon2id oder bcrypt, sichere serverseitige Sitzungen und Zugriffskontrollen auf dem Server. Geheimnisse und echte Passwörter dürfen niemals in GitHub-Dateien gespeichert werden.
+## Auf dem eigenen Server starten
 
-## Wiederverwendung in anderen Projekten
-Die Oberfläche und das Verhalten sind bewusst getrennt:
-- Design anpassen in `style.css`
-- Formular und Ansichten anpassen in `index.html`
-- Authentifizierungslogik ersetzen in `script.js`
+1. Projekt auf den Server laden.
+2. Node.js 20+ installieren und im Projektordner `npm install` ausführen.
+3. Einen langen, zufälligen Sitzungsschlüssel als Umgebungsvariable setzen. Beispiel zum Erzeugen: `openssl rand -hex 32`.
+4. `NODE_ENV=production`, `SESSION_SECRET` und `APP_ORIGIN=https://deine-domain.example` in der Server-Umgebung konfigurieren. Ersetze die Beispiel-Domain durch deine echte HTTPS-Adresse.
+5. Starte mit `npm start` und betreibe den Prozess dauerhaft, z. B. mit systemd oder einem Prozessmanager.
+6. Richte einen Reverse Proxy ein, der HTTPS erzwingt. Falls der Proxy TLS beendet, setze zusätzlich `TRUST_PROXY=1`.
+7. Sorge dafür, dass nur der Server-Benutzer auf den Ordner `data/` zugreifen kann. Sichere die Datenbank regelmäßig mit Backups.
 
-Wenn du die Demo später produktiv nutzen möchtest, ersetze die lokale Prüfung durch Anfragen an einen Backend-Endpunkt wie `POST /api/register` und `POST /api/login`. Der Server muss bei jedem privaten Dateiabruf selbst prüfen, ob die Sitzung berechtigt ist.
+`SESSION_SECRET` niemals in GitHub committen. Setze `DATA_DIR` auf einen dauerhaften, nicht öffentlich erreichbaren Ordner, wenn deine Hosting-Umgebung temporäre Projektverzeichnisse verwendet.
+
+## Private Dateien hinzufügen
+
+1. Lege die Datei in `private-files/` ab.
+2. Füge in `server.js` einen festen Eintrag in das Objekt `privateFiles` ein, z. B. eine ID und einen Dateipfad.
+3. Lade Dateien ausschließlich über `/api/files` und `/api/files/:id`. Übernimm niemals einen beliebigen Dateipfad direkt aus einer URL.
+4. Falls unterschiedliche Benutzer verschiedene Dateien sehen dürfen, ergänze eine Berechtigungsprüfung pro Benutzer und Datei.
+
+## Wichtig
+
+Das ist ein solides Lern-/Starterprojekt, aber kein automatisch vollständig geprüftes Produktionsprodukt. Halte Node.js und Pakete aktuell, nutze ausschließlich HTTPS, überwache Loginversuche und prüfe die Konfiguration deines Servers. Registrierung ist derzeit öffentlich offen. Für ein privates Projekt solltest du sie abschalten oder nur Einladungen erlauben. Alte Konten aus der vorherigen localStorage-Demo werden nicht übernommen; registriere neue Konten.
