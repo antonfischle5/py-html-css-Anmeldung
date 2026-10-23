@@ -3,35 +3,30 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Anmelden und ein Konto erstellen.">
   <title>Anmelden</title>
   <link rel="stylesheet" href="./style.css">
   <script src="./script.js" defer></script>
 </head>
 <body>
-  <main class="shell shell-login">
-    <section class="panel" aria-labelledby="panel-title">
-      <div class="logo" aria-hidden="true">A</div>
-      <div id="auth-view">
-        <div class="tabs" role="tablist" aria-label="Anmeldeart">
-          <button class="tab active" id="login-tab" type="button" role="tab" aria-selected="true">Anmelden</button>
-          <button class="tab" id="register-tab" type="button" role="tab" aria-selected="false">Konto erstellen</button>
-        </div>
-        <h1 id="panel-title">Willkommen zurück</h1>
-        <p class="muted" id="panel-subtitle">Melde dich mit deinem Konto an.</p>
-        <form id="auth-form">
-          <label for="username">Benutzername</label>
-          <input id="username" name="username" autocomplete="username" minlength="3" maxlength="32" required placeholder="Dein Benutzername">
-          <label for="password">Passwort</label>
-          <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="Dein Passwort">
-          <label class="confirm-label hidden" id="confirm-label" for="confirm-password">Passwort wiederholen</label>
-          <input class="hidden" id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" placeholder="Passwort erneut eingeben">
-          <p id="message" class="message" role="status" aria-live="polite"></p>
-          <button class="primary" id="submit-button" type="submit">Anmelden <span>→</span></button>
-        </form>
+  <main class="panel" aria-labelledby="panel-title">
+    <div id="auth-view">
+      <div class="tabs" role="tablist" aria-label="Anmeldeart">
+        <button class="tab active" id="login-tab" type="button" role="tab" aria-selected="true">Anmelden</button>
+        <button class="tab" id="register-tab" type="button" role="tab" aria-selected="false">Konto erstellen</button>
       </div>
-    </section>
-    <footer>HTML · CSS · JavaScript · Node.js</footer>
+      <h1 id="panel-title">Willkommen zurück</h1>
+      <p class="muted" id="panel-subtitle">Melde dich mit deinem Konto an.</p>
+      <form id="auth-form">
+        <label for="username">Benutzername</label>
+        <input id="username" name="username" autocomplete="username" minlength="3" maxlength="32" required placeholder="Dein Benutzername">
+        <label for="password">Passwort</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="Dein Passwort">
+        <label class="confirm-label hidden" id="confirm-label" for="confirm-password">Passwort wiederholen</label>
+        <input class="hidden" id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" placeholder="Passwort erneut eingeben">
+        <p id="message" class="message" role="status" aria-live="polite"></p>
+        <button class="primary" id="submit-button" type="submit">Anmelden <span>→</span></button>
+      </form>
+    </div>
   </main>
 </body>
 </html>
