@@ -5,3 +5,5 @@ data/
 *.sqlite-shm
 *.sqlite-wal
 .DS_Store
+private-files/*
+!private-files/welcome.txt
