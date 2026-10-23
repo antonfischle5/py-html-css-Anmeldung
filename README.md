@@ -1,32 +1,42 @@
-# Anmeldemenü – Designvorschau
+# Anmeldesystem
 
-Diese Website ist eine **statische Designvorschau** für ein Anmeldemenü. Sie kann über GitHub Pages oder direkt als HTML-Datei angezeigt werden.
+Eine einfache Anmeldeseite mit Registrierung und echter serverseitiger Anmeldung. Die Oberfläche verwendet HTML, CSS und JavaScript; Node.js und SQLite verarbeiten Konten und Sitzungen.
 
-## Was funktioniert in der Vorschau?
+## Voraussetzungen
 
-- Zwischen „Anmelden“ und „Konto erstellen“ wechseln
-- Formularfelder und einfache Eingabeprüfung ausprobieren
-- Nach Absenden eine Beispielansicht mit Beispieldateien öffnen
-- Beispiel-Dateien in einer Vorschau ansehen und sich wieder abmelden
-- Layout auf Desktop und Smartphone ansehen
+- Node.js 20 oder neuer
+- npm (wird mit Node.js installiert)
 
-## Wichtig: keine echte Anmeldung
+## Lokal starten
 
-Die Vorschau erstellt keine Konten, sendet keine Daten an einen Server und speichert keine Passwörter. Beliebige Testdaten reichen, um die Oberfläche auszuprobieren. Die angezeigten Dateien sind nur Beispiele.
+1. Lade das Repository herunter und entpacke die ZIP-Datei.
+2. Öffne einen Terminal-/Konsolen-Tab im Projektordner.
+3. Installiere die Abhängigkeiten:
 
-**Für echte Konten auf deinem eigenen Server** ist das separate Backend in `server.js` nötig. Dafür gelten die Installationsanweisungen und Sicherheitsvoraussetzungen weiter unten in diesem Repository. Eine statische GitHub-Pages-Seite kann selbst keine sichere serverseitige Passwortprüfung durchführen.
+   ```bash
+   npm install
+   ```
 
-## Lokale Vorschau
+4. Starte den Server:
 
-Öffne `index.html` im Browser oder veröffentliche das Repository mit GitHub Pages. Die Dateien verwenden relative Pfade, damit es auch unter einer GitHub-Pages-Projektadresse funktioniert.
+   ```bash
+   npm start
+   ```
 
-## Echtes Backend starten
+5. Öffne **http://localhost:3000** im Browser. Öffne `index.html` nicht direkt per Doppelklick, weil dann kein Backend für die Anmeldung läuft.
 
-Benötigt Node.js 20 oder neuer:
+Beim ersten Registrieren wird ein Benutzerkonto in der SQLite-Datenbank erstellt. Passwörter werden mit Argon2id gehasht; sie werden nicht im Klartext gespeichert. Sitzungen werden serverseitig verwaltet.
+
+## Wichtige Hinweise
+
+- GitHub Pages kann nur die statische Oberfläche ausliefern. Für die echte Anmeldung muss der Node.js-Server auf einem Server laufen, der Node.js unterstützt.
+- Für den produktiven Internetbetrieb müssen HTTPS und ein starkes, geheimes `SESSION_SECRET` in der Server-Umgebung gesetzt sein. Lege außerdem `APP_ORIGIN` auf die genaue öffentliche Adresse deiner Website fest.
+- Die Datenbank und Sitzungsdateien liegen im Verzeichnis `data`. Sichere dieses Verzeichnis und veröffentliche es nicht.
+- Private Dateien werden nicht automatisch öffentlich gemacht. Der Beispiel-Endpunkt erlaubt nur die Datei, die ausdrücklich in `server.js` eingetragen ist.
+
+## Server-Start für die Entwicklung
 
 ```bash
 npm install
-npm run dev
+npm start
 ```
-
-Für den Betrieb im Internet sind zusätzlich HTTPS, ein sicher gesetzter `SESSION_SECRET`, eine passende `APP_ORIGIN`-Umgebungsvariable und eine geprüfte Serverkonfiguration erforderlich. Siehe `server.js` und die weiter unten dokumentierten Schritte aus der vorherigen Version.
