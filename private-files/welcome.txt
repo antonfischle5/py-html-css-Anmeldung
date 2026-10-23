@@ -1,0 +1,5 @@
+Willkommen im geschützten Dateibereich!
+
+Diese Beispieldatei wird vom Server nur nach erfolgreicher Anmeldung ausgeliefert.
+
+Lege private Dateien in diesem Projekt in den Ordner private-files und füge sie mit einer festen ID zur Freigabeliste in server.js hinzu. Gib niemals einen frei wählbaren Dateipfad aus einer URL direkt an das Dateisystem weiter.
