@@ -39,7 +39,7 @@ npm run dev
 
 ## Private Dateien hinzufügen
 
-1. Lege die Datei in `private-files/` ab.
+1. Lege die Datei auf dem Server in `private-files/` ab. **Committe keine echten privaten Dateien in ein öffentliches GitHub-Repository.** Der Beispieltext `welcome.txt` ist nur eine harmlose Demo-Datei.
 2. Füge in `server.js` einen festen Eintrag in das Objekt `privateFiles` ein, z. B. eine ID und einen Dateipfad.
 3. Lade Dateien ausschließlich über `/api/files` und `/api/files/:id`. Übernimm niemals einen beliebigen Dateipfad direkt aus einer URL.
 4. Falls unterschiedliche Benutzer verschiedene Dateien sehen dürfen, ergänze eine Berechtigungsprüfung pro Benutzer und Datei.
