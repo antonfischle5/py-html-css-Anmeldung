@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Wiederverwendbares Demo-Anmeldesystem mit Registrierung und geschütztem Demo-Bereich.">
+  <title>Anmeldung – Demo</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="shell">
+    <section class="brand">
+      <div class="logo" aria-hidden="true">A</div>
+      <p class="eyebrow">AUTHENTIFIZIERUNG · DEMO</p>
+      <h1>Dein Bereich.<br><span>Dein Zugang.</span></h1>
+      <p class="intro">Ein schlichtes Anmeldesystem, das du als Ausgangspunkt für andere Webprojekte verwenden kannst.</p>
+      <div class="feature"><span>✓</span> Anmelden und registrieren</div>
+      <div class="feature"><span>✓</span> Demo-Dateibereich nach Anmeldung</div>
+      <div class="feature"><span>✓</span> Sitzung beim Neuladen behalten</div>
+    </section>
+
+    <section class="panel" aria-labelledby="panel-title">
+      <div id="auth-view">
+        <div class="tabs" role="tablist" aria-label="Anmeldeart">
+          <button class="tab active" id="login-tab" type="button" role="tab" aria-selected="true">Anmelden</button>
+          <button class="tab" id="register-tab" type="button" role="tab" aria-selected="false">Konto erstellen</button>
+        </div>
+        <h2 id="panel-title">Willkommen zurück</h2>
+        <p class="muted" id="panel-subtitle">Melde dich mit deinem Konto an.</p>
+        <form id="auth-form">
+          <label for="username">Benutzername</label>
+          <input id="username" name="username" autocomplete="username" minlength="3" maxlength="32" required placeholder="Dein Benutzername">
+          <label for="password">Passwort</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" minlength="8" required placeholder="Mindestens 8 Zeichen">
+          <label class="confirm-label hidden" id="confirm-label" for="confirm-password">Passwort wiederholen</label>
+          <input class="hidden" id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" placeholder="Passwort erneut eingeben">
+          <p id="message" class="message" role="status" aria-live="polite"></p>
+          <button class="primary" id="submit-button" type="submit">Anmelden <span>→</span></button>
+        </form>
+        <p class="small-note">Demo-Version: Konten werden nur in diesem Browser gespeichert.</p>
+      </div>
+
+      <div id="app-view" class="hidden">
+        <div class="user-line"><div class="avatar" id="user-avatar">U</div><div><p class="eyebrow">ANGEMELDET ALS</p><strong id="welcome-user">Benutzer</strong></div><button class="logout" id="logout-button" type="button">Abmelden</button></div>
+        <h2>Deine Dateien</h2>
+        <p class="muted">Der geschützte Demo-Bereich ist freigeschaltet.</p>
+        <div class="file-list">
+          <a class="file" href="README.md" target="_blank" rel="noopener"><span class="file-icon">MD</span><span><strong>README.md</strong><small>Projektinformationen</small></span><span class="arrow">↗</span></a>
+          <a class="file" href="style.css" target="_blank" rel="noopener"><span class="file-icon">CSS</span><span><strong>style.css</strong><small>Design der Anmeldeseite</small></span><span class="arrow">↗</span></a>
+          <a class="file" href="script.js" target="_blank" rel="noopener"><span class="file-icon">JS</span><span><strong>script.js</strong><small>Anmelde-Demo</small></span><span class="arrow">↗</span></a>
+        </div>
+        <p class="warning"><strong>Wichtig:</strong> Das ist nur ein Frontend-Demonstrator. Die Dateien sind öffentlich erreichbar und die Anmeldung schützt sie nicht wirklich vor direktem Zugriff.</p>
+      </div>
+    </section>
+    <footer>HTML · CSS · JavaScript <span>Nur zu Lern- und Testzwecken</span></footer>
+  </main>
+</body>
+</html>
