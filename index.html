@@ -3,21 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Wiederverwendbares Anmeldesystem mit serverseitiger Passwort-Hashing- und Sitzungsverwaltung.">
-  <title>Sicheres Anmeldesystem</title>
-  <link rel="stylesheet" href="/style.css">
-  <script src="/script.js" defer></script>
+  <meta name="description" content="Vorschau eines Anmeldemenüs.">
+  <title>Anmeldemenü – Designvorschau</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
   <main class="shell">
     <section class="brand">
       <div class="logo" aria-hidden="true">A</div>
-      <p class="eyebrow">AUTHENTIFIZIERUNG · SERVER</p>
+      <p class="eyebrow">ANMELDEMENÜ · DESIGNVORSCHAU</p>
       <h1>Dein Bereich.<br><span>Dein Zugang.</span></h1>
-      <p class="intro">Ein wiederverwendbares Anmeldesystem. Passwörter bleiben auf dem Server und werden niemals im Klartext gespeichert.</p>
-      <div class="feature"><span>✓</span> Argon2id-Passwort-Hashing</div>
-      <div class="feature"><span>✓</span> Serverseitige Sitzungen</div>
-      <div class="feature"><span>✓</span> Dateien nur nach Anmeldung</div>
+      <p class="intro">Diese Seite zeigt nur, wie das Anmeldemenü aussehen kann. Du kannst die Oberfläche ausprobieren, ohne echte Konten anzulegen.</p>
+      <div class="feature"><span>✓</span> Modernes, responsives Design</div>
+      <div class="feature"><span>✓</span> Anmelden und Registrieren umschalten</div>
+      <div class="feature"><span>✓</span> Beispielansicht nach dem Anmelden</div>
     </section>
     <section class="panel" aria-labelledby="panel-title">
       <div id="auth-view">
@@ -26,7 +26,7 @@
           <button class="tab" id="register-tab" type="button" role="tab" aria-selected="false">Konto erstellen</button>
         </div>
         <h2 id="panel-title">Willkommen zurück</h2>
-        <p class="muted" id="panel-subtitle">Melde dich mit deinem Konto an.</p>
+        <p class="muted" id="panel-subtitle">Probiere das Design mit beliebigen Testdaten aus.</p>
         <form id="auth-form">
           <label for="username">Benutzername</label>
           <input id="username" name="username" autocomplete="username" minlength="3" maxlength="32" required placeholder="Dein Benutzername">
@@ -37,18 +37,18 @@
           <p id="message" class="message" role="status" aria-live="polite"></p>
           <button class="primary" id="submit-button" type="submit">Anmelden <span>→</span></button>
         </form>
-        <p class="small-note">Dein Passwort wird mit Argon2id gehasht. Es wird nicht im Browser gespeichert.</p>
+        <p class="small-note">Design-Demo: Deine Eingaben werden nicht gespeichert oder an einen Server gesendet.</p>
       </div>
       <div id="app-view" class="hidden">
         <div class="user-line"><div class="avatar" id="user-avatar">U</div><div><p class="eyebrow">ANGEMELDET ALS</p><strong id="welcome-user">Benutzer</strong></div><button class="logout" id="logout-button" type="button">Abmelden</button></div>
         <h2>Deine Dateien</h2>
-        <p class="muted">Diese Beispieldateien werden serverseitig geprüft.</p>
+        <p class="muted">Beispielansicht zur Gestaltung des geschützten Bereichs – keine echte Dateiprüfung.</p>
         <div class="file-list" id="file-list"></div>
         <div id="file-preview" class="file-preview hidden"><div class="preview-heading"><strong id="preview-name">Datei</strong><button id="close-preview" class="logout" type="button">Schließen</button></div><pre id="preview-content"></pre></div>
-        <p class="warning"><strong>Server-Hinweis:</strong> Lege private Dateien außerhalb eines öffentlich ausgelieferten Ordners ab und schütze jeden Datei-Endpunkt serverseitig.</p>
+        <p class="warning"><strong>Nur eine Vorschau:</strong> Diese Anmeldung schützt keine echten Dateien. Für echte Benutzerkonten brauchst du das Backend auf deinem eigenen Server.</p>
       </div>
     </section>
-    <footer>HTML · CSS · Node.js <span>Vor Veröffentlichung HTTPS aktivieren</span></footer>
+    <footer>HTML · CSS · JavaScript <span>Nur Designvorschau – keine echte Anmeldung</span></footer>
   </main>
 </body>
 </html>
