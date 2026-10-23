@@ -3,23 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Wiederverwendbares Demo-Anmeldesystem mit Registrierung und geschütztem Demo-Bereich.">
-  <title>Anmeldung – Demo</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+  <meta name="description" content="Wiederverwendbares Anmeldesystem mit serverseitiger Passwort-Hashing- und Sitzungsverwaltung.">
+  <title>Sicheres Anmeldesystem</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/script.js" defer></script>
 </head>
 <body>
   <main class="shell">
     <section class="brand">
       <div class="logo" aria-hidden="true">A</div>
-      <p class="eyebrow">AUTHENTIFIZIERUNG · DEMO</p>
+      <p class="eyebrow">AUTHENTIFIZIERUNG · SERVER</p>
       <h1>Dein Bereich.<br><span>Dein Zugang.</span></h1>
-      <p class="intro">Ein schlichtes Anmeldesystem, das du als Ausgangspunkt für andere Webprojekte verwenden kannst.</p>
-      <div class="feature"><span>✓</span> Anmelden und registrieren</div>
-      <div class="feature"><span>✓</span> Demo-Dateibereich nach Anmeldung</div>
-      <div class="feature"><span>✓</span> Sitzung beim Neuladen behalten</div>
+      <p class="intro">Ein wiederverwendbares Anmeldesystem. Passwörter bleiben auf dem Server und werden niemals im Klartext gespeichert.</p>
+      <div class="feature"><span>✓</span> Argon2id-Passwort-Hashing</div>
+      <div class="feature"><span>✓</span> Serverseitige Sitzungen</div>
+      <div class="feature"><span>✓</span> Dateien nur nach Anmeldung</div>
     </section>
-
     <section class="panel" aria-labelledby="panel-title">
       <div id="auth-view">
         <div class="tabs" role="tablist" aria-label="Anmeldeart">
@@ -32,28 +31,24 @@
           <label for="username">Benutzername</label>
           <input id="username" name="username" autocomplete="username" minlength="3" maxlength="32" required placeholder="Dein Benutzername">
           <label for="password">Passwort</label>
-          <input id="password" name="password" type="password" autocomplete="current-password" minlength="8" required placeholder="Mindestens 8 Zeichen">
+          <input id="password" name="password" type="password" autocomplete="current-password" minlength="12" required placeholder="Mindestens 12 Zeichen">
           <label class="confirm-label hidden" id="confirm-label" for="confirm-password">Passwort wiederholen</label>
           <input class="hidden" id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" placeholder="Passwort erneut eingeben">
           <p id="message" class="message" role="status" aria-live="polite"></p>
           <button class="primary" id="submit-button" type="submit">Anmelden <span>→</span></button>
         </form>
-        <p class="small-note">Demo-Version: Konten werden nur in diesem Browser gespeichert.</p>
+        <p class="small-note">Dein Passwort wird mit Argon2id gehasht. Es wird nicht im Browser gespeichert.</p>
       </div>
-
       <div id="app-view" class="hidden">
         <div class="user-line"><div class="avatar" id="user-avatar">U</div><div><p class="eyebrow">ANGEMELDET ALS</p><strong id="welcome-user">Benutzer</strong></div><button class="logout" id="logout-button" type="button">Abmelden</button></div>
         <h2>Deine Dateien</h2>
-        <p class="muted">Der geschützte Demo-Bereich ist freigeschaltet.</p>
-        <div class="file-list">
-          <a class="file" href="README.md" target="_blank" rel="noopener"><span class="file-icon">MD</span><span><strong>README.md</strong><small>Projektinformationen</small></span><span class="arrow">↗</span></a>
-          <a class="file" href="style.css" target="_blank" rel="noopener"><span class="file-icon">CSS</span><span><strong>style.css</strong><small>Design der Anmeldeseite</small></span><span class="arrow">↗</span></a>
-          <a class="file" href="script.js" target="_blank" rel="noopener"><span class="file-icon">JS</span><span><strong>script.js</strong><small>Anmelde-Demo</small></span><span class="arrow">↗</span></a>
-        </div>
-        <p class="warning"><strong>Wichtig:</strong> Das ist nur ein Frontend-Demonstrator. Die Dateien sind öffentlich erreichbar und die Anmeldung schützt sie nicht wirklich vor direktem Zugriff.</p>
+        <p class="muted">Diese Beispieldateien werden serverseitig geprüft.</p>
+        <div class="file-list" id="file-list"></div>
+        <div id="file-preview" class="file-preview hidden"><div class="preview-heading"><strong id="preview-name">Datei</strong><button id="close-preview" class="logout" type="button">Schließen</button></div><pre id="preview-content"></pre></div>
+        <p class="warning"><strong>Server-Hinweis:</strong> Lege private Dateien außerhalb eines öffentlich ausgelieferten Ordners ab und schütze jeden Datei-Endpunkt serverseitig.</p>
       </div>
     </section>
-    <footer>HTML · CSS · JavaScript <span>Nur zu Lern- und Testzwecken</span></footer>
+    <footer>HTML · CSS · Node.js <span>Vor Veröffentlichung HTTPS aktivieren</span></footer>
   </main>
 </body>
 </html>
