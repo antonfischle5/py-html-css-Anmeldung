@@ -116,8 +116,8 @@ app.post("/api/register", authLimiter, validOrigin, async (req, res, next) => {
     if (!/^[a-zA-Z0-9_-]{3,32}$/.test(username)) {
       return res.status(400).json({ error: "Benutzername: 3–32 Zeichen, nur Buchstaben, Zahlen, _ und -." });
     }
-    if (typeof password !== "string" || password.length < 12 || Buffer.byteLength(password, "utf8") > 1024) {
-      return res.status(400).json({ error: "Das Passwort muss mindestens 12 Zeichen lang sein." });
+    if (typeof password !== "string" || password.length < 6 || password.length > 100) {
+      return res.status(400).json({ error: "Das Passwort muss zwischen 6 und 100 Zeichen lang sein." });
     }
     const passwordHash = await argon2.hash(password, {
       type: argon2.argon2id,
@@ -149,7 +149,7 @@ app.post("/api/login", authLimiter, validOrigin, async (req, res, next) => {
   try {
     const username = normalizeUsername(req.body?.username);
     const password = req.body?.password;
-    if (!/^[a-zA-Z0-9_-]{3,32}$/.test(username) || typeof password !== "string" || password.length > 1024) {
+    if (!/^[a-zA-Z0-9_-]{3,32}$/.test(username) || typeof password !== "string" || password.length < 6 || password.length > 100) {
       return res.status(400).json({ error: "Benutzername oder Passwort ist falsch." });
     }
     const user = findUser.get(username.toLowerCase());
