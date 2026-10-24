@@ -28,7 +28,10 @@ function setMode(nextMode) {
   confirmField.classList.toggle("hidden", !registering);
   confirmPassword.required = registering;
   passwordInput.autocomplete = registering ? "new-password" : "current-password";
-  passwordInput.minLength = registering ? 12 : 1;
+  passwordInput.minLength = registering ? 6 : 1;
+  passwordInput.maxLength = 100;
+  confirmPassword.minLength = 6;
+  confirmPassword.maxLength = 100;
   showMessage("");
 }
 
@@ -48,8 +51,8 @@ form.addEventListener("submit", async (event) => {
     showMessage("Username must be 3–32 characters and use only letters, numbers, _ or -.");
     return;
   }
-  if (mode === "register" && password.length < 12) {
-    showMessage("Password must be at least 12 characters long.");
+  if (password.length < 6 || password.length > 100) {
+    showMessage("Password must be between 6 and 100 characters long.");
     return;
   }
   if (mode === "register" && password !== confirmPassword.value) {
@@ -90,3 +93,5 @@ form.addEventListener("submit", async (event) => {
     submitButton.disabled = false;
   }
 });
+
+setMode("login");
