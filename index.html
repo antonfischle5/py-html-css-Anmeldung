@@ -1,32 +1,35 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Anmelden</title>
+  <title>Login Here</title>
   <link rel="stylesheet" href="./style.css">
   <script src="./script.js" defer></script>
 </head>
 <body>
-  <main class="panel" aria-labelledby="panel-title">
-    <div id="auth-view">
-      <div class="tabs" role="tablist" aria-label="Anmeldeart">
-        <button class="tab active" id="login-tab" type="button" role="tab" aria-selected="true">Anmelden</button>
-        <button class="tab" id="register-tab" type="button" role="tab" aria-selected="false">Konto erstellen</button>
+  <main class="login-box" aria-labelledby="panel-title">
+    <h1 id="panel-title">Login Here</h1>
+    <form id="auth-form">
+      <div class="field">
+        <label for="username">Username:</label>
+        <input id="username" name="username" autocomplete="username" minlength="3" maxlength="32" required>
       </div>
-      <h1 id="panel-title">Willkommen zurück</h1>
-      <p class="muted" id="panel-subtitle">Melde dich mit deinem Konto an.</p>
-      <form id="auth-form">
-        <label for="username">Benutzername</label>
-        <input id="username" name="username" autocomplete="username" minlength="3" maxlength="32" required placeholder="Dein Benutzername">
-        <label for="password">Passwort</label>
-        <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="Dein Passwort">
-        <label class="confirm-label hidden" id="confirm-label" for="confirm-password">Passwort wiederholen</label>
-        <input class="hidden" id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" placeholder="Passwort erneut eingeben">
-        <p id="message" class="message" role="status" aria-live="polite"></p>
-        <button class="primary" id="submit-button" type="submit">Anmelden <span>→</span></button>
-      </form>
-    </div>
+      <div class="field">
+        <label for="password">Password:</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+      </div>
+      <div class="field confirm-field hidden" id="confirm-field">
+        <label for="confirm-password">Confirm:</label>
+        <input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password">
+      </div>
+      <p id="message" class="message" role="status" aria-live="polite"></p>
+      <div class="actions">
+        <button id="submit-button" type="submit">Login</button>
+        <span id="switch-text">Not yet a Member?</span>
+        <a href="#" id="switch-link">Register</a>
+      </div>
+    </form>
   </main>
 </body>
 </html>
