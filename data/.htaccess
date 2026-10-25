@@ -1,0 +1,2 @@
+# Protect the SQLite database and all files in this directory from direct web access.
+Require all denied
