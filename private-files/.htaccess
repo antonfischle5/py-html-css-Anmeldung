@@ -1,0 +1,2 @@
+# Private files are only served through api.php after login.
+Require all denied
