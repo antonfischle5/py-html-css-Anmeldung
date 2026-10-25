@@ -1,42 +1,31 @@
-# Anmeldesystem
+# Anmeldesystem (PHP-Version für ALL-INKL)
 
-Eine einfache Anmeldeseite mit Registrierung und echter serverseitiger Anmeldung. Die Oberfläche verwendet HTML, CSS und JavaScript; Node.js und SQLite verarbeiten Konten und Sitzungen.
+Die Oberfläche nutzt HTML, CSS und JavaScript. Registrierung, Anmeldung und Sitzungen werden durch `api.php` mit PHP verarbeitet.
+
+## Hochladen auf ALL-INKL
+
+1. Lade diese Version als ZIP herunter und entpacke sie.
+2. Lade `index.html`, `api.php` und den Ordner `private-files` in den Ordner deiner Domain hoch.
+3. Lade den Ordner `data` mit seiner `.htaccess` ebenfalls hoch. PHP legt darin die SQLite-Datenbank an.
+4. Stelle sicher, dass der Ordner `data` vom PHP-Prozess beschreibbar ist. Verwende möglichst restriktive Dateirechte.
+5. Öffne die Website über HTTPS und teste zuerst die Registrierung mit einem Testkonto.
 
 ## Voraussetzungen
 
-- Node.js 20 oder neuer
-- npm (wird mit Node.js installiert)
+- PHP mit PDO_SQLITE (muss auf dem Hosting aktiviert sein)
+- Schreibrechte für den Ordner `data`
+- HTTPS für den produktiven Betrieb
 
-## Lokal starten
+Wenn beim Registrieren die Meldung erscheint, dass PDO_SQLITE nicht verfügbar ist, kann diese PHP-Version die benötigte SQLite-Datenbank nicht verwenden. Dann muss eine unterstützte Datenbank eingerichtet oder eine andere Hosting-Variante verwendet werden.
 
-1. Lade das Repository herunter und entpacke die ZIP-Datei.
-2. Öffne einen Terminal-/Konsolen-Tab im Projektordner.
-3. Installiere die Abhängigkeiten:
+## Sicherheit
 
-   ```bash
-   npm install
-   ```
+- Passwörter werden mit `password_hash` gehasht und beim Login mit `password_verify` geprüft.
+- Sitzungen verwenden HTTP-only-Cookies, SameSite Strict und werden nach erfolgreicher Anmeldung erneuert.
+- Anmeldeversuche werden pro IP in einem 15-Minuten-Fenster begrenzt.
+- Die Ordner `data` und `private-files` enthalten Schutzdateien, damit ihre Inhalte nicht direkt über den Browser abgerufen werden können.
+- Die bisherige Node.js-Version bleibt in `server.js` und `package.json` erhalten. Diese PHP-Version ist auf dem Branch `php-backend`, damit die bisherige `main`-Version nicht überschrieben wird.
 
-4. Starte den Server:
+## Lokal testen
 
-   ```bash
-   npm start
-   ```
-
-5. Öffne **http://localhost:3000** im Browser. Öffne `index.html` nicht direkt per Doppelklick, weil dann kein Backend für die Anmeldung läuft.
-
-Beim ersten Registrieren wird ein Benutzerkonto in der SQLite-Datenbank erstellt. Passwörter werden mit Argon2id gehasht; sie werden nicht im Klartext gespeichert. Sitzungen werden serverseitig verwaltet.
-
-## Wichtige Hinweise
-
-- GitHub Pages kann nur die statische Oberfläche ausliefern. Für die echte Anmeldung muss der Node.js-Server auf einem Server laufen, der Node.js unterstützt.
-- Für den produktiven Internetbetrieb müssen HTTPS und ein starkes, geheimes `SESSION_SECRET` in der Server-Umgebung gesetzt sein. Lege außerdem `APP_ORIGIN` auf die genaue öffentliche Adresse deiner Website fest.
-- Die Datenbank und Sitzungsdateien liegen im Verzeichnis `data`. Sichere dieses Verzeichnis und veröffentliche es nicht.
-- Private Dateien werden nicht automatisch öffentlich gemacht. Der Beispiel-Endpunkt erlaubt nur die Datei, die ausdrücklich in `server.js` eingetragen ist.
-
-## Server-Start für die Entwicklung
-
-```bash
-npm install
-npm start
-```
+Zum Testen benötigst du PHP mit PDO_SQLITE. Lege die Dateien in einen lokalen Webserver-Ordner und öffne die Seite über diesen Webserver. Nicht einfach per Doppelklick auf `index.html` öffnen.
