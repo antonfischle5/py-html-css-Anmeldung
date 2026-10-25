@@ -4,8 +4,113 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Login Here</title>
-  <link rel="stylesheet" href="./style.css">
-  <script src="./script.js" defer></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 12px;
+      background: #fff;
+      color: #111;
+      font-family: "Times New Roman", Times, serif;
+    }
+    
+    .login-box {
+      width: 285px;
+      max-width: 100%;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      margin: 0 0 22px;
+      text-align: center;
+      font-size: 21px;
+      font-weight: bold;
+    }
+    
+    .field {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 4px;
+    }
+    
+    label {
+      flex: 0 0 75px;
+      font-size: 16px;
+      white-space: nowrap;
+    }
+    
+    input {
+      width: 176px;
+      min-width: 0;
+      height: 24px;
+      padding: 2px 4px;
+      border: 1px solid #cfcfcf;
+      border-radius: 0;
+      background: white;
+      color: #111;
+      font: 16px "Times New Roman", Times, serif;
+    }
+    
+    input:focus {
+      outline: 1px solid #999;
+    }
+    
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-top: 4px;
+      white-space: nowrap;
+      font-size: 16px;
+    }
+    
+    button {
+      margin-right: 22px;
+      padding: 3px 9px;
+      border: 1px solid #aaa;
+      border-radius: 0;
+      background: #eee;
+      color: #111;
+      font: 16px "Times New Roman", Times, serif;
+      cursor: pointer;
+    }
+    
+    a {
+      color: #551a8b;
+      text-decoration: underline;
+    }
+    
+    .message {
+      margin: 5px 0 0;
+      color: #b00020;
+      font-size: 13px;
+      white-space: normal;
+    }
+    
+    .message.success {
+      color: #176b2c;
+    }
+    
+    .hidden {
+      display: none !important;
+    }
+    
+    @media (max-width: 320px) {
+      .login-box {
+        width: 100%;
+      }
+    
+      .actions {
+        flex-wrap: wrap;
+        white-space: normal;
+      }
+    }
+  </style>
 </head>
 <body>
   <main class="login-box" aria-labelledby="panel-title">
@@ -31,5 +136,104 @@
       </div>
     </form>
   </main>
+  <script>
+    const form = document.querySelector("#auth-form");
+    const title = document.querySelector("#panel-title");
+    const usernameInput = document.querySelector("#username");
+    const passwordInput = document.querySelector("#password");
+    const confirmField = document.querySelector("#confirm-field");
+    const confirmPassword = document.querySelector("#confirm-password");
+    const submitButton = document.querySelector("#submit-button");
+    const switchText = document.querySelector("#switch-text");
+    const switchLink = document.querySelector("#switch-link");
+    const message = document.querySelector("#message");
+    
+    let mode = "login";
+    let busy = false;
+    
+    function showMessage(text, success = false) {
+      message.textContent = text;
+      message.classList.toggle("success", success);
+    }
+    
+    function setMode(nextMode) {
+      mode = nextMode;
+      const registering = mode === "register";
+    
+      title.textContent = registering ? "Register Here" : "Login Here";
+      submitButton.textContent = registering ? "Register" : "Login";
+      switchText.textContent = registering ? "Already a Member?" : "Not yet a Member?";
+      switchLink.textContent = registering ? "Login" : "Register";
+      confirmField.classList.toggle("hidden", !registering);
+      confirmPassword.required = registering;
+      passwordInput.autocomplete = registering ? "new-password" : "current-password";
+      passwordInput.minLength = registering ? 6 : 1;
+      passwordInput.maxLength = 100;
+      confirmPassword.minLength = 6;
+      confirmPassword.maxLength = 100;
+      showMessage("");
+    }
+    
+    switchLink.addEventListener("click", (event) => {
+      event.preventDefault();
+      setMode(mode === "login" ? "register" : "login");
+    });
+    
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (busy) return;
+    
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value;
+    
+      if (!/^[a-zA-Z0-9_-]{3,32}$/.test(username)) {
+        showMessage("Username must be 3–32 characters and use only letters, numbers, _ or -.");
+        return;
+      }
+      if (password.length < 6 || password.length > 100) {
+        showMessage("Password must be between 6 and 100 characters long.");
+        return;
+      }
+      if (mode === "register" && password !== confirmPassword.value) {
+        showMessage("The passwords do not match.");
+        return;
+      }
+    
+      busy = true;
+      submitButton.disabled = true;
+      showMessage(mode === "register" ? "Creating account..." : "Logging in...");
+    
+      try {
+        const response = await fetch(mode === "register" ? "/api/register" : "/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify({ username, password })
+        });
+        const result = response.status === 204 ? {} : await response.json().catch(() => ({}));
+    
+        if (!response.ok) {
+          showMessage(result.error || "Something went wrong. Please try again.");
+          return;
+        }
+    
+        showMessage(
+          mode === "register" ? "Account created successfully." : "Login successful.",
+          true
+        );
+        form.querySelectorAll(".field, .actions").forEach((element) => {
+          element.classList.add("hidden");
+        });
+        title.textContent = "Success";
+      } catch {
+        showMessage("The server could not be reached. Start the project with npm start and open http://localhost:3000.");
+      } finally {
+        busy = false;
+        submitButton.disabled = false;
+      }
+    });
+    
+    setMode("login");
+  </script>
 </body>
 </html>
