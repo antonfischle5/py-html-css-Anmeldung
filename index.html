@@ -204,7 +204,7 @@
       showMessage(mode === "register" ? "Creating account..." : "Logging in...");
     
       try {
-        const response = await fetch(mode === "register" ? "/api/register" : "/api/login", {
+        const response = await fetch("api.php?action=" + (mode === "register" ? "register" : "login"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "same-origin",
@@ -226,7 +226,7 @@
         });
         title.textContent = "Success";
       } catch {
-        showMessage("The server could not be reached. Start the project with npm start and open http://localhost:3000.");
+        showMessage("The server could not be reached. Check that api.php is uploaded and PHP with SQLite is available.");
       } finally {
         busy = false;
         submitButton.disabled = false;
