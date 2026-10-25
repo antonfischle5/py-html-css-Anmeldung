@@ -186,6 +186,63 @@ if ($action === 'logout') {
     exit;
 }
 
+if ($action === 'update-profile') {
+    if ($method !== 'POST') {
+        header('Allow: POST');
+        respond(405, ['error' => 'Diese Anfrage ist nicht erlaubt.']);
+    }
+    requireLogin();
+
+    $raw = file_get_contents('php://input');
+    $body = json_decode($raw === false ? '' : $raw, true);
+    if (!is_array($body)) respond(400, ['error' => 'Ungültige Anfrage.']);
+
+    $currentPassword = is_string($body['currentPassword'] ?? null) ? $body['currentPassword'] : '';
+    $newUsername = array_key_exists('username', $body) && is_string($body['username']) ? trim($body['username']) : null;
+    $newPassword = is_string($body['newPassword'] ?? null) ? $body['newPassword'] : '';
+
+    if ($currentPassword === '') respond(400, ['error' => 'Bitte gib dein aktuelles Passwort ein.']);
+
+    $stmt = $db->prepare('SELECT id, username, password_hash FROM users WHERE id = ?');
+    $stmt->execute([(int)$_SESSION['user_id']]);
+    $user = $stmt->fetch();
+    if (!$user || !password_verify($currentPassword, (string)$user['password_hash'])) {
+        respond(403, ['error' => 'Dein aktuelles Passwort ist falsch.']);
+    }
+
+    if ($newUsername !== null) {
+        if (!preg_match('/^[a-zA-Z0-9_-]{3,32}$/', $newUsername)) {
+            respond(400, ['error' => 'Der Name muss 3–32 Zeichen lang sein und darf nur Buchstaben, Zahlen, _ und - enthalten.']);
+        }
+        try {
+            $stmt = $db->prepare('UPDATE users SET username = ?, username_key = ? WHERE id = ?');
+            $stmt->execute([$newUsername, strtolower($newUsername), (int)$_SESSION['user_id']]);
+        } catch (PDOException $error) {
+            if (str_contains(strtolower($error->getMessage()), 'unique')) {
+                respond(409, ['error' => 'Dieser Name wird bereits verwendet. Bitte wähle einen anderen.']);
+            }
+            error_log('Username update failed: ' . $error->getMessage());
+            respond(500, ['error' => 'Der Name konnte nicht geändert werden.']);
+        }
+        $_SESSION['username'] = $newUsername;
+    }
+
+    if ($newPassword !== '') {
+        if (strlen($newPassword) < 6 || strlen($newPassword) > 100) {
+            respond(400, ['error' => 'Das neue Passwort muss zwischen 6 und 100 Zeichen lang sein.']);
+        }
+        $algo = defined('PASSWORD_ARGON2ID') ? PASSWORD_ARGON2ID : PASSWORD_DEFAULT;
+        if ($algo === PASSWORD_DEFAULT && strlen($newPassword) > 72) {
+            respond(400, ['error' => 'Das neue Passwort ist für diese PHP-Konfiguration zu lang.']);
+        }
+        $hash = password_hash($newPassword, $algo);
+        $stmt = $db->prepare('UPDATE users SET password_hash = ? WHERE id = ?');
+        $stmt->execute([$hash, (int)$_SESSION['user_id']]);
+    }
+
+    respond(200, ['username' => (string)($_SESSION['username'] ?? '')]);
+}
+
 if ($action === 'files') {
     if ($method !== 'GET') respond(405, ['error' => 'Diese Anfrage ist nicht erlaubt.']);
     requireLogin();
